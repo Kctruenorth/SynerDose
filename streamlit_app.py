@@ -382,7 +382,7 @@ def make_sweep_fig(results, opt_X):
 # Main Results Area
 # ─────────────────────────────────────────────
 if not run_btn:
-    st.info("👈 Configure parameters in the sidebar, then click **▶ Run Simulation** to begin.")
+    st.info("Enter parameters in the sidebar, then click **▶ Run Simulation** to begin.")
 
     # Show equations summary
     with st.expander("Mathematical Equations"):
