@@ -501,26 +501,26 @@ else:
     
     # 2. Resistance trajectory
     if pr_trend > 0.05:
-        st.error(f"**Resistance is spreading** — p_R went from {p_R0:.2f} → {final_pr:.2f}.")
+        st.error(f"**Resistance is spreading** : p_R went from {p_R0:.2f} → {final_pr:.2f}.")
     elif pr_trend < -0.05:
-        st.success(f"**Resistance is being suppressed** — p_R dropped from {p_R0:.2f} → {final_pr:.2f}. The schedule is keeping Hawks in check.")
+        st.success(f"**Resistance is being suppressed** : p_R dropped from {p_R0:.2f} → {final_pr:.2f}. The schedule is keeping Hawks in check.")
     else:
-        st.info(f"**Resistance is stable** — p_R held near {final_pr:.2f}. Neither spreading nor being eliminated.")
+        st.info(f"**Resistance is stable** : p_R held near {final_pr:.2f}. Neither spreading nor being eliminated.")
     
     # 3. DTP buffer role
     if final_pp > 0.1 and final_pr < final_pp:
-        st.info(f"**DTPs are acting as a Retaliator buffer** — persisters ({final_pp:.2f}) outnumber resistant cells ({final_pr:.2f}) at equilibrium, similar to how Hawks get suppressed by Retaliators.")
+        st.success(f"**DTPs are acting as a Retaliator buffer** : persisters ({final_pp:.2f}) outnumber resistant cells ({final_pr:.2f}) at equilibrium, similar to how Hawks get suppressed by Retaliators.")
     elif final_pp < 0.05:
-        st.warning(f"**DTP population has collapsed** — no Retaliator buffer remains.")
+        st.warning(f"**DTP population has collapsed** : no Retaliator buffer remains.")
     
     # 4. Bottom line
     st.markdown("---")
     if not wb_ever_pos and pr_trend <= 0:
-        st.success("**Result:** This schedule achieves both tumor suppression (w̄ < 0) and contains resistance.")
+        st.success("**Result:** Optimal: This schedule achieves both tumor suppression (w̄ < 0) and contains resistance.")
     elif wb_ever_pos and pr_trend > 0.05:
-        st.error("**Result:** Tumor escapes and resistance spreads.")
+        st.error("**Result:** Sub-Optimal: Tumor escapes and resistance spreads.")
     else:
-        st.warning("**Result:** Partial control — some suppression achieved but uncertain about long-term sustainablity.")
+        st.warning("**Result:** Some suppression achieved but uncertain about long-term sustainablity.")
 
     st.divider()
 
