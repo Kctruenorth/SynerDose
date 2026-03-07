@@ -437,7 +437,7 @@ else:
     col_left, col_right = st.columns(2)
 
     with col_left:
-        st.markdown("### Fitness at Optimal X")
+        st.markdown("### Fitness at t=0")
         st.markdown(f"""
 <div class="metric-card positive">W_S (Sensitive / Dove):  &nbsp;<strong>{W_S_opt:+.5f}</strong></div>
 <div class="metric-card positive">W_R (Resistant / Hawk):  &nbsp;<strong>{W_R_opt:+.5f}</strong></div>
