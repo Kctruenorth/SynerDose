@@ -391,7 +391,7 @@ if not run_btn:
 |---|----------|-------------|
 | 1 | `base_i(X) = X·λ_i + (1-X)·μ_i − a_syn·X·(1-X)` |  Base Fitness (Under drugs) |
 | 2 | `W_i = base_i(X) + Σ p_j · A[i,j]` | Interactions Between Populations and Game Payoff |
-| 3 | ``w̄ = Σ p_i · W_i` | Average Population Fitness |
+| 3 | `w̄ = Σ p_i · W_i` | Average Population Fitness |
 | 4 | `Δp_i = p_i · (W_i − w̄)` | Replicator Equation |
 | 5 | `p_i(t+Δt) = p_i(t) + Δt·Δp_i` | Euler's Method to Update Cell Fractions  |
 | 6 | `N(t+Δt) = N·exp(w̄·Δt·(1−N/K)` | Ricker Model for Updating Population Size |
@@ -471,12 +471,56 @@ else:
 
     # ── Interpretation ──
     st.markdown("### Interpretation")
-    if W_R_opt < W_S_opt and W_R_opt < W_P_opt:
-        st.success("**Resistant (Hawk) has the lowest fitness** — the drug schedule suppresses Hawks. DTPs (Retaliators) act as a buffer against resistance re-emergence.")
-    elif W_P_opt > W_R_opt:
-        st.info("**DTPs have fitness advantage over Resistant** at this schedule — consistent with Retaliator suppressing Hawk in game theory.")
+    # Run simulation at optimal X to get full trajectory
+    _, hist = simulate(p_S0, p_R0, opt_X, N0, dt=0.1, t_max=500)
+    
+    # Reconstruct w̄ at each timestep
+    wb_trajectory = []
+    for h in hist:
+        ps, pr = h[1], h[2]
+        W_S_t, W_R_t, W_P_t = fitness_all(ps, pr, opt_X, syn_score)
+        wb_trajectory.append(w_bar(ps, pr, W_S_t, W_R_t, W_P_t))
+    
+    wb_start    = wb_trajectory[0]
+    wb_end      = wb_trajectory[-1]
+    wb_ever_pos = any(w > 0 for w in wb_trajectory)
+    wb_cross_t  = next((hist[i][0] for i, w in enumerate(wb_trajectory) if w > 0), None)
+    
+    # Final state
+    final_pr = hist[-1][2]
+    final_pp = hist[-1][3]
+    pr_trend = final_pr - p_R0  # positive = resistance spread
+    
+    # 1. Overall tumor control (most important)
+    if not wb_ever_pos:
+        st.success(f"**Tumor under sustained control** : w̄ remained negative throughout (started at {wb_start:+.4f}, ended at {wb_end:+.4f}). Net population is shrinking at all times. Elimination is theoretically possible at this schedule.")
+    elif wb_cross_t is not None:
+        st.warning(f"**w̄ crossed zero at t ≈ {wb_cross_t:.1f}** : tumor was initially suppressed but regrew. This is Time to POD")
     else:
-        st.warning("**Resistant cells remain competitive.** Consider adjusting interaction parameters or increasing drug doses.")
+        st.error(f"**w̄ positive from the start ({wb_start:+.4f})** : schedule does not suppress the tumor. ")
+    
+    # 2. Resistance trajectory
+    if pr_trend > 0.05:
+        st.error(f"**Resistance is spreading** — p_R went from {p_R0:.2f} → {final_pr:.2f}.")
+    elif pr_trend < -0.05:
+        st.success(f"**Resistance is being suppressed** — p_R dropped from {p_R0:.2f} → {final_pr:.2f}. The schedule is keeping Hawks in check.")
+    else:
+        st.info(f"**Resistance is stable** — p_R held near {final_pr:.2f}. Neither spreading nor being eliminated.")
+    
+    # 3. DTP buffer role
+    if final_pp > 0.1 and final_pr < final_pp:
+        st.info(f"**DTPs are acting as a Retaliator buffer** — persisters ({final_pp:.2f}) outnumber resistant cells ({final_pr:.2f}) at equilibrium, similar to how Hawks get suppressed by Retaliators.")
+    elif final_pp < 0.05:
+        st.warning(f"**DTP population has collapsed** — no Retaliator buffer remains.")
+    
+    # 4. Bottom line
+    st.markdown("---")
+    if not wb_ever_pos and pr_trend <= 0:
+        st.success("**Result:** This schedule achieves both tumor suppression (w̄ < 0) and contains resistance.")
+    elif wb_ever_pos and pr_trend > 0.05:
+        st.error("**Result:** Tumor escapes and resistance spreads.")
+    else:
+        st.warning("**Result:** Partial control — some suppression achieved but uncertain about long-term sustainablity.")
 
     st.divider()
 
