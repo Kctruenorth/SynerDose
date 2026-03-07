@@ -486,7 +486,6 @@ else:
     wb_ever_pos = any(w > 0 for w in wb_trajectory)
     wb_cross_t  = next((hist[i][0] for i, w in enumerate(wb_trajectory) if w > 0), None)
     
-    dominated = max(final_ps, final_pr, final_pp) > 0.85
     coexisting = all(f > 0.05 for f in [final_ps, final_pr, final_pp])
     
     # 1. Overall tumor control (most important)
@@ -500,7 +499,7 @@ else:
     st.markdown("---")
     if not wb_ever_pos and coexisting:
         st.success("**Optimal** — tumor suppressed and all three populations coexist (No single population dominates).")
-    elif not wb_ever_pos and dominated:
+    elif not wb_ever_pos and not coexisting:
         st.warning("**Suboptimal** — tumor is shrinking but one population dominates. Competitive suppression of resistance may be fragile.")
     elif wb_ever_pos and coexisting:
         st.warning("**Coexistence without control** — populations balanced but tumor is net growing. Adjust dosing intensity.")
