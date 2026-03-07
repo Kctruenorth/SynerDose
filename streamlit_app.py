@@ -485,7 +485,9 @@ else:
     wb_end      = wb_trajectory[-1]
     wb_ever_pos = any(w > 0 for w in wb_trajectory)
     wb_cross_t  = next((hist[i][0] for i, w in enumerate(wb_trajectory) if w > 0), None)
-    
+    final_ps = hist[-1][1]
+    final_pr = hist[-1][2]
+    final_pp = hist[-1][3]
     coexisting = all(f > 0.05 for f in [final_ps, final_pr, final_pp])
     
     # 1. Overall tumor control (most important)
