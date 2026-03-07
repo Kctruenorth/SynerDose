@@ -500,12 +500,12 @@ else:
     st.markdown("---")
     if not wb_ever_pos and coexisting:
         st.success("**Optimal** — tumor suppressed and all three populations coexist (No single population dominates).")
-        elif not wb_ever_pos and dominated:
-            st.warning("**Suboptimal** — tumor is shrinking but one population dominates. Competitive suppression of resistance may be fragile.")
-        elif wb_ever_pos and coexisting:
-            st.warning("**Coexistence without control** — populations balanced but tumor is net growing. Adjust dosing intensity.")
-        else:
-            st.error("**Failed schedule** — tumor escaping and/or resistance dominating.")
+    elif not wb_ever_pos and dominated:
+        st.warning("**Suboptimal** — tumor is shrinking but one population dominates. Competitive suppression of resistance may be fragile.")
+    elif wb_ever_pos and coexisting:
+        st.warning("**Coexistence without control** — populations balanced but tumor is net growing. Adjust dosing intensity.")
+    else:
+        st.error("**Failed schedule** — tumor escaping and/or resistance dominating.")
 
     st.divider()
 
