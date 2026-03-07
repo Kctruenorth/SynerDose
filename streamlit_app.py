@@ -131,7 +131,7 @@ with st.sidebar:
     run_btn = st.button("▶ Run Simulation", type="primary", use_container_width=True)
 
 # ─────────────────────────────────────────────
-# Model Core (same logic as original script)
+# Model Core 
 # ─────────────────────────────────────────────
 SYNERGY_SCALE = 0.015
 
@@ -284,7 +284,7 @@ def make_ternary_fig(opt_X, N0, p_S0, p_R0):
     ax.set_ylim(-0.18, np.sqrt(3)/2 + 0.18)
 
     legend_elements = [
-        Line2D([0], [0], color='#1a1a2e', lw=2.5, label='Your initial condition'),
+        Line2D([0], [0], color='#1a1a2e', lw=2.5, label='Initial condition'),
         Line2D([0], [0], marker='o', color='gray', lw=0, markersize=6, label='Start'),
         Line2D([0], [0], marker='s', color='gray', lw=0, markersize=6, label='End'),
     ]
@@ -385,18 +385,16 @@ if not run_btn:
     st.info("👈 Configure parameters in the sidebar, then click **▶ Run Simulation** to begin.")
 
     # Show equations summary
-    with st.expander("📐 Model Equations Reference"):
+    with st.expander("Mathematical Equations"):
         st.markdown("""
 | # | Equation | Description |
 |---|----------|-------------|
-| 1 | `p_S + p_R + p_P = 1` | Simplex constraint |
-| 2 | `base_i(X) = X·λ_i + (1-X)·μ_i − a_syn·X·(1-X)` | Baseline fitness |
-| 3 | `W_i = base_i(X) + Σ p_j · A[i,j]` | Strategy fitness |
-| 4 | `w̄ = Σ p_i · W_i` | Average fitness |
-| 5 | `Δp_i = p_i · (W_i − w̄)` | Replicator equation |
-| 6 | `W_i(pure) < 0 ∀i` | Elimination condition |
-| 7 | `p_i(t+Δt) = p_i(t) + Δt·Δp_i` | Euler update |
-| 8 | `N(t+Δt) = N·exp(w̄·Δt·(1−N/K))` | Ricker model |
+| 1 | `base_i(X) = X·λ_i + (1-X)·μ_i − a_syn·X·(1-X)` |  Base Fitness (Under drugs) |
+| 2 | `W_i = base_i(X) + Σ p_j · A[i,j]` | Interactions Between Populations and Game Payoff |
+| 3 | ``w̄ = Σ p_i · W_i` | Average Population Fitness |
+| 4 | `Δp_i = p_i · (W_i − w̄)` | Replicator Equation |
+| 5 | `p_i(t+Δt) = p_i(t) + Δt·Δp_i` | Euler's Method to Update Cell Fractions  |
+| 6 | `N(t+Δt) = N·exp(w̄·Δt·(1−N/K)` | Ricker Model for Updating Population Size |
 """)
 else:
     # ── Run ──
@@ -405,7 +403,7 @@ else:
     p_R0 = r0 / N0
     p_P0 = max(0.0, 1.0 - p_S0 - p_R0)
 
-    with st.spinner("🔬 Scanning drug schedules..."):
+    with st.spinner("Iterating between drug schedules..."):
         elim_poss, opt_X, max_t, all_results = optimize(p_S0, p_R0, N0)
 
     W_S_opt, W_R_opt, W_P_opt = fitness_all(p_S0, p_R0, opt_X, syn_score)
@@ -413,7 +411,7 @@ else:
     dp_S, dp_R, dp_P = delta_p(p_S0, p_R0, W_S_opt, W_R_opt, W_P_opt)
 
     # ── Summary Metrics ──
-    st.markdown("## 📊 Results")
+    st.markdown("## Results")
 
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Optimal Drug 1 Fraction (X)", f"{opt_X:.2f}")
@@ -430,7 +428,7 @@ else:
             unsafe_allow_html=True)
     else:
         st.markdown(
-            f'<span class="elim-badge elim-no">Elimination Not Possible — Max time to POD: {round(max_t, 2)}</span>',
+            f'<span class="elim-badge elim-no">Elimination Is Not Possible — Max time to POD: {round(max_t, 2)}</span>',
             unsafe_allow_html=True)
 
     st.markdown("")
@@ -472,15 +470,13 @@ else:
     st.divider()
 
     # ── Interpretation ──
-    st.markdown("### 🔍 Clinical Interpretation")
+    st.markdown("### Interpretation")
     if W_R_opt < W_S_opt and W_R_opt < W_P_opt:
-        st.success("**Resistant (Hawk) has LOWEST fitness** — the drug schedule suppresses Hawks. DTPs (Retaliators) act as a competitive buffer against resistance re-emergence.")
+        st.success("**Resistant (Hawk) has the lowest fitness** — the drug schedule suppresses Hawks. DTPs (Retaliators) act as a buffer against resistance re-emergence.")
     elif W_P_opt > W_R_opt:
-        st.info("**DTPs have fitness advantage over Resistant** at this schedule — consistent with Retaliator suppressing Hawk in HDR theory.")
+        st.info("**DTPs have fitness advantage over Resistant** at this schedule — consistent with Retaliator suppressing Hawk in game theory.")
     else:
-        st.warning("**Resistant cells remain competitive.** Consider adjusting interaction parameters or increasing drug doses to shift the fitness landscape.")
-
-    st.info("💡 **HDR Insight:** Do NOT fully eliminate DTP/Persister cells — they competitively suppress Resistant cells when the Retaliator fraction `q > threshold`. This supports adaptive therapy strategies.")
+        st.warning("**Resistant cells remain competitive.** Consider adjusting interaction parameters or increasing drug doses.")
 
     st.divider()
 
@@ -500,7 +496,7 @@ else:
         st.pyplot(fig2, use_container_width=True)
 
     # ── Initial Conditions Summary ──
-    with st.expander("📋 Initial Conditions Detail"):
+    with st.expander(" Initial Conditions"):
         st.markdown(f"""
 | Parameter | Value |
 |-----------|-------|
