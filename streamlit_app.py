@@ -95,7 +95,7 @@ with st.sidebar:
     st.markdown("## ⚙️ Parameters")
 
     st.markdown('<div class="section-header">Synergy</div>', unsafe_allow_html=True)
-    syn_score = st.number_input("Synergy Score", value=0.5, step=0.05, format="%.3f",
+    syn_score = st.number_input("Synergy Score", value=20, step=0.05, format="%.3f",
                                 help="Drug synergy score from ML model")
 
     st.markdown('<div class="section-header">Sensitive Cells (S / Dove)</div>', unsafe_allow_html=True)
