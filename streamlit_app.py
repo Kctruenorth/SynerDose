@@ -45,7 +45,7 @@ h1, h2, h3 {
 }
 
 .metric-card {
-    background: #808080;
+    background: transparent;
     border-left: 4px solid #1a1a2e;
     padding: 0.75rem 1rem;
     border-radius: 4px;
