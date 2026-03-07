@@ -14,7 +14,6 @@ from matplotlib.lines import Line2D
 # ─────────────────────────────────────────────
 st.set_page_config(
     page_title="Drug Dosing Schedule Model",
-    page_icon="🧬",
     layout="wide",
 )
 
@@ -85,8 +84,8 @@ h1, h2, h3 {
 # ─────────────────────────────────────────────
 # Header
 # ─────────────────────────────────────────────
-st.markdown("# 🧬 Drug Dosing Schedule Model")
-st.markdown("**HDR Framework** — Sensitive · Resistant · Drug-Tolerant Persisters")
+st.markdown("# Drug Dosing Schedule Model")
+st.markdown("**Based on Hawk Dove Retaliator Game** — Sensitive · Resistant · Drug-Tolerant Persisters")
 st.divider()
 
 # ─────────────────────────────────────────────
@@ -427,11 +426,11 @@ else:
     # ── Elimination badge ──
     if elim_poss:
         st.markdown(
-            '<span class="elim-badge elim-yes">✅ Elimination Possible — all strategies have negative fitness at optimal X</span>',
+            '<span class="elim-badge elim-yes">Elimination Possible</span>',
             unsafe_allow_html=True)
     else:
         st.markdown(
-            f'<span class="elim-badge elim-no">⚠️ Elimination Not Possible — Max time to POD: {round(max_t, 2)}</span>',
+            f'<span class="elim-badge elim-no">Elimination Not Possible — Max time to POD: {round(max_t, 2)}</span>',
             unsafe_allow_html=True)
 
     st.markdown("")
@@ -486,7 +485,7 @@ else:
     st.divider()
 
     # ── Plots ──
-    st.markdown("### 📈 Visualizations")
+    st.markdown("### 📈 Visuals")
 
     tab1, tab2 = st.tabs(["Ternary Simplex & Population Dynamics", "Drug Schedule Sweep"])
 
