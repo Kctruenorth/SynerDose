@@ -6,7 +6,6 @@ from googleapiclient.discovery import build
 
 st.set_page_config(
     page_title="Contribute — Drug Synergy",
-    page_icon="🧬",
     layout="centered"
 )
 
@@ -152,17 +151,17 @@ def append_to_sheet(data: dict):
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="header-block">
-    <h1 style="margin:0; font-size:1.6rem;">CONTRIBUTE DATA</h1>
+    <h1 style="margin:0; font-size:1.6rem;">Contribute Data</h1>
     <p style="margin:0.3rem 0 0; color:#8899bb; font-size:0.85rem; font-family:'IBM Plex Mono',monospace;">
-        Help improve the model by submitting real experimental results
+        Enter new experimental data to help improve the ML model
     </p>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("""
 <div class="info-box">
-    By submitting your experimental data, you help expand the training dataset.<br>
-    All fields are required. The synergy score should be the experimentally observed Loewe score.
+    By submitting new data, it helps expand the training dataset.<br>
+    All fields are required. The synergy score should be measured with Loewe model.
 </div>
 """, unsafe_allow_html=True)
 
@@ -177,7 +176,7 @@ with col2:
     compound_b = st.text_input("Compound B", placeholder="e.g. TKI").strip()
 
 # ── Drug A Parameters ─────────────────────────────────────────────────────────
-st.markdown('<p class="section-label">Drug A — Pharmacological Parameters</p>', unsafe_allow_html=True)
+st.markdown('<p class="section-label">Drug A - Parameters</p>', unsafe_allow_html=True)
 a1, a2, a3, a4 = st.columns(4)
 with a1:
     max_conc_a = st.number_input("Max Conc A (µM)", min_value=0.0, value=1.0, step=0.1, help="Typical: 1 – 3 µM")
@@ -189,7 +188,7 @@ with a4:
     einf_a = st.number_input("Einf A (%)", min_value=0.0, max_value=100.0, value=38.0, step=1.0, help="Typical: 10.4 – 79.2%")
 
 # ── Drug B Parameters ─────────────────────────────────────────────────────────
-st.markdown('<p class="section-label">Drug B — Pharmacological Parameters</p>', unsafe_allow_html=True)
+st.markdown('<p class="section-label">Drug B - Parameters</p>', unsafe_allow_html=True)
 b1, b2, b3, b4 = st.columns(4)
 with b1:
     max_conc_b = st.number_input("Max Conc B (µM)", min_value=0.0, value=1.0, step=0.1, help="Typical: 1 – 3 µM")
@@ -201,9 +200,9 @@ with b4:
     einf_b = st.number_input("Einf B (%)", min_value=0.0, max_value=100.0, value=45.0, step=1.0, help="Typical: 11 – 80.4%")
 
 # ── Observed Synergy Score ────────────────────────────────────────────────────
-st.markdown('<p class="section-label">Observed Outcome</p>', unsafe_allow_html=True)
+st.markdown('<p class="section-label">Synergy</p>', unsafe_allow_html=True)
 synergy_score = st.number_input(
-    "Observed Synergy Score (Loewe)",
+    "Measured Synergy Score (Loewe)",
     value=0.0,
     step=0.1,
     help="The experimentally measured synergy score. ≥ 20 = synergistic."
@@ -211,7 +210,7 @@ synergy_score = st.number_input(
 
 # ── Submit ────────────────────────────────────────────────────────────────────
 st.markdown("---")
-if st.button("SUBMIT DATA"):
+if st.button("Submit Data"):
     if not cell_line or not compound_a or not compound_b:
         st.error("Please fill in Cell Line, Compound A, and Compound B.")
     else:
