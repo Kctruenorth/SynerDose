@@ -3,3 +3,6 @@ numpy
 matplotlib
 joblib
 pandas
+xgboost
+scikit-learn
+category_encoders
