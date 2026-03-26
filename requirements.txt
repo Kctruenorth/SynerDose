@@ -6,3 +6,6 @@ pandas
 xgboost
 scikit-learn
 category_encoders
+time
+google.oauth2.service_account
+googleapiclient.discovery
