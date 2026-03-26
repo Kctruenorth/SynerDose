@@ -162,6 +162,7 @@ st.markdown("""
 <div class="info-box">
     By submitting new data, it helps expand the training dataset.<br>
     All fields are required. The synergy score should be measured with Loewe model.
+    <a href= "https://docs.google.com/spreadsheets/d/1e0jkPmkRL3VuBg6Ei_RWtzRPsI00RMS7cMZyg5rqWOs/edit?usp=sharing" target = "_blank" > Dataset </a>
 </div>
 """, unsafe_allow_html=True)
 
