@@ -6,7 +6,6 @@ import pandas as pd
 
 st.set_page_config(
     page_title="Drug Synergy Predictor",
-    page_icon="🧬",
     layout="centered"
 )
 
@@ -164,9 +163,9 @@ def add_interactions(df):
 # ── Header ───────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="header-block">
-    <h1 style="margin:0; font-size:1.6rem;">DRUG SYNERGY PREDICTOR</h1>
+    <h1 style="margin:0; font-size:1.6rem;">Drug Synergy Predictor</h1>
     <p style="margin:0.3rem 0 0; color:#8899bb; font-size:0.85rem; font-family:'IBM Plex Mono',monospace;">
-        XGBoost · Clinical + Genomic Features · Loewe Synergy Score
+        Enter the Pharmcological Properties for Each Drug
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -190,7 +189,7 @@ with col2:
     compound_b = st.text_input("Compound B", value="TKI", placeholder="e.g. TKI")
 
 # ── Drug A Parameters ─────────────────────────────────────────────────────────
-st.markdown('<p class="section-label">Drug A — Pharmacological Parameters</p>', unsafe_allow_html=True)
+st.markdown('<p class="section-label">Drug A - Parameters</p>', unsafe_allow_html=True)
 a1, a2, a3, a4 = st.columns(4)
 with a1:
     max_conc_a = st.number_input("Max Conc A (µM)", min_value=0.0, value=1.0, step=0.1, help="Typical: 1 – 3 µM")
@@ -202,7 +201,7 @@ with a4:
     einf_a = st.number_input("Einf A (%)", min_value=0.0, max_value=100.0, value=38.0, step=1.0, help="Typical: 10.4 – 79.2%")
 
 # ── Drug B Parameters ─────────────────────────────────────────────────────────
-st.markdown('<p class="section-label">Drug B — Pharmacological Parameters</p>', unsafe_allow_html=True)
+st.markdown('<p class="section-label">Drug B - Parameters</p>', unsafe_allow_html=True)
 b1, b2, b3, b4 = st.columns(4)
 with b1:
     max_conc_b = st.number_input("Max Conc B (µM)", min_value=0.0, value=1.0, step=0.1, help="Typical: 1 – 3 µM")
@@ -251,7 +250,7 @@ if st.button("RUN PREDICTION"):
 
             st.markdown(f"""
             <div class="result-card {card_class}">
-                <div class="score-label">Predicted Loewe Synergy Score</div>
+                <div class="score-label">Predicted Synergy Score (Loewe)</div>
                 <div class="score-value">{pred:.2f}</div>
                 <div style="margin-top:0.75rem; font-size:1rem; letter-spacing:3px;">
                     {emoji} &nbsp; {label}
