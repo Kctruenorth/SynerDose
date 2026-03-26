@@ -117,7 +117,6 @@ st.markdown("""
 # ── Google Sheets Setup ───────────────────────────────────────────────────────
 SCOPE = ['https://www.googleapis.com/auth/spreadsheets']
 
-@st.cache_resource
 def get_sheet_service():
     credentials_info = dict(st.secrets["google_credentials"])
     credentials = Credentials.from_service_account_info(credentials_info, scopes=SCOPE)
