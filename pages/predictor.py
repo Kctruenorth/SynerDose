@@ -3,6 +3,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
+
 st.set_page_config(
     page_title="Drug Synergy Predictor",
     page_icon="🧬",
@@ -153,11 +154,6 @@ def load_models():
     genetics_df    = joblib.load("genetics_df.pkl")
     return model, encoder, final_features, genetics_df
 
-@st.cache_data
-def load_known_compounds():
-    train_clean = pd.read_csv("train_clean.csv")
-    return set(train_clean["COMPOUND_A"].unique()) | set(train_clean["COMPOUND_B"].unique())
-
 def add_interactions(df):
     df = df.copy()
     df["IC50_A_log"] = np.log1p(df["IC50_A"])
@@ -177,7 +173,6 @@ st.markdown("""
 
 try:
     model, encoder, final_features, genetics_df = load_models()
-    known_compounds = load_known_compounds()
 except Exception as e:
     st.error(f"Failed to load model files: {e}")
     st.stop()
@@ -193,15 +188,6 @@ with col1:
     compound_a = st.text_input("Compound A", value="MAP2K_1", placeholder="e.g. MAP2K_1")
 with col2:
     compound_b = st.text_input("Compound B", value="TKI", placeholder="e.g. TKI")
-
-# Warn for unknown compounds
-warnings = []
-if compound_a and compound_a not in known_compounds:
-    warnings.append(f"⚠ '{compound_a}' was not seen during training — prediction may be less accurate.")
-if compound_b and compound_b not in known_compounds:
-    warnings.append(f"⚠ '{compound_b}' was not seen during training — prediction may be less accurate.")
-for w in warnings:
-    st.markdown(f'<div class="warning-box">{w}</div>', unsafe_allow_html=True)
 
 # ── Drug A Parameters ─────────────────────────────────────────────────────────
 st.markdown('<p class="section-label">Drug A — Pharmacological Parameters</p>', unsafe_allow_html=True)
